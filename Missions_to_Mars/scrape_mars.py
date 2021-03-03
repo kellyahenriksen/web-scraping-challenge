@@ -31,16 +31,12 @@ import pandas as pd
 
 def init_browser():
     # @NOTE: Replace the path with your actual path to the chromedriver
-    # executable_path = {"executable_path": "/usr/local/bin/chromedriver"}
-    executable_path = {'executable_path': ChromeDriverManager().install()}
+    executable_path = {"executable_path": "chromedriver.exe"}
+    # executable_path = {'executable_path': ChromeDriverManager().install()}
     browser = Browser('chrome', **executable_path, headless=False)
 
 
-
-
-
-
-def scrape_info():
+def scrape():
     browser = init_browser()
 
 
@@ -247,3 +243,14 @@ def scrape_info():
 
     # close browser session   
     browser.quit()
+
+    scraped_data = {
+        "news_title": news_title,
+        "news_para": news_p,
+        "featuredimage_url": img_url,
+        "mars_fact_table": facts_df, 
+        "hemisphere_images": hemisphere_image_urls
+    }
+
+    # --- Return results ---
+    return scraped_data
