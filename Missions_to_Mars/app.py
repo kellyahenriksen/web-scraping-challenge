@@ -35,7 +35,7 @@ def scrape():
 def data():
 
     # Find one record of data from the mongo database
-    mars_info = mongo.db.mars_data.find_one()
+    mars_info = mongo.db.collection.find_one()
 
     # Return template and data
     return render_template("data.html", info=mars_info)

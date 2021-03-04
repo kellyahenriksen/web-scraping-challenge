@@ -97,7 +97,7 @@ def scrape():
     # In[10]:
 
 
-    img_url = url + img_url_rel
+    img_url = "https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/" + img_url_rel
     img_url
 
 
