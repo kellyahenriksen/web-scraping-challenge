@@ -16,15 +16,15 @@ import pandas as pd
 # # In[2]:
 
 
-# conn = 'mongodb://localhost:27017'
-# client = pymongo.MongoClient(conn)
+conn = 'mongodb://localhost:27017'
+client = pymongo.MongoClient(conn)
 
 
-# # In[3]:
+# In[3]:
 
 
-# db = client.mars_db
-# collection = db.articles
+db = client.mars_db
+collection = db.collection
 
 
 # # In[4]:
@@ -33,7 +33,7 @@ def init_browser():
     # @NOTE: Replace the path with your actual path to the chromedriver
     executable_path = {"executable_path": "chromedriver.exe"}
     # executable_path = {'executable_path': ChromeDriverManager().install()}
-    browser = Browser('chrome', **executable_path, headless=False)
+    return Browser('chrome', **executable_path, headless=False)
 
 
 def scrape():
@@ -66,42 +66,6 @@ def scrape():
 
     print(news_title)
     print(news_p)
-
-
-    # In[ ]:
-
-
-
-
-
-    # In[7]:
-
-
-    # def featured_image(browser):
-    #     # Visit URL
-    #     url = 'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/index.html'
-    #     browser.visit(url)
-
-    #     # Find and click the full image button
-    #     full_image_elem = browser.find_by_tag('button')[1]
-    #     full_image_elem.click()
-
-    #     # Parse the resulting html with soup
-    #     html = browser.html
-    #     img_soup = soup(html, 'html.parser')
-
-    #     # Add try/except for error handling
-    #     try:
-    #         # find the relative image url
-    #         img_url_rel = img_soup.find('img', class_='fancybox-image').get('src')
-
-    #     except AttributeError:
-    #         return None
-
-    #     # Use the base url to create an absolute url
-    #     img_url = f'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/{img_url_rel}'
-
-    #     return img_url
 
 
     # In[8]:
@@ -164,7 +128,7 @@ def scrape():
     # In[13]:
 
 
-    facts_df.to_html('marsfacts.html', index=False)
+    mars_facts = facts_df.to_html('marsfacts.html', index=False)
 
 
     # In[ ]:
@@ -246,11 +210,14 @@ def scrape():
 
     scraped_data = {
         "news_title": news_title,
-        "news_para": news_p,
+        "news_p": news_p,
         "featuredimage_url": img_url,
-        "mars_fact_table": facts_df, 
+        "mars_fact_table": mars_facts, 
         "hemisphere_images": hemisphere_image_urls
     }
+    collection.drop()
+    collection.insert_one(scraped_data)
 
     # --- Return results ---
     return scraped_data
+
